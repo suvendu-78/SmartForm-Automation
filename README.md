@@ -1,125 +1,62 @@
 # Smart Form Automation
 
-A dynamic web form automation project built using **JavaScript and Selenium WebDriver**.
-
-The project automatically identifies and interacts with form elements using visible labels and DOM relationships instead of depending entirely on fixed element IDs or class names.
+A dynamic web form automation project built using JavaScript and Selenium WebDriver.
 
 ## Features
 
 - Automatically detects the First Name textbox.
-- Identifies and selects a Gender radio button.
-- Detects and selects an option from the State dropdown.
-- Verifies whether each interaction was successful.
-- Generates a PASS/FAIL test report.
-- Supports configurable target URLs.
-- Uses JavaScript ES Modules.
+- Selects a Gender radio button.
+- Selects an option from the State dropdown.
+- Verifies each field with PASS/FAIL results.
+- Supports configurable URLs.
+- Uses label-based detection and DOM relationships.
 
-## Tech Stack
+## Technologies
 
-- JavaScript (Node.js)
+- JavaScript
+- Node.js
 - Selenium WebDriver
 - Google Chrome
-- Nodemon
-
-## Project Structure
-
-```text
-smart-form-automation/
-│
-├── config/
-│   └── config.js
-│
-├── src/
-│   ├── browser.js
-│   ├── detector.js
-│   └── automation.js
-│
-├── index.js
-├── package.json
-├── package-lock.json
-├── .gitignore
-└── README.md
-```
 
 ## Installation
 
-Clone the repository:
-
 ```bash
 git clone https://github.com/suvendu-78/SmartForm-Automation.git
-```
-
-Navigate to the project directory:
-
-```bash
 cd SmartForm-Automation
-```
-
-Install dependencies:
-
-```bash
 npm install
 ```
 
-## Configuration
-
-Update `config/config.js`:
-
-```javascript
-export const config = {
-  url:
-    process.env.TARGET_URL ||
-    "https://app.cloudqa.io/home/AutomationPracticeForm",
-
-  firstName: "Suvendu",
-  gender: "Male",
-  state: "India",
-};
-```
-
-You can change the URL and test values without modifying the automation logic.
-
-## Run the Project
-
-Start the automation:
+## Run
 
 ```bash
 npm start
 ```
 
-Run in development mode:
+## Configuration
 
-```bash
-npm run dev
-```
+Update the URL and test values in `config/config.js`.
 
-## Automation Approach
+You can also provide a different URL using the `TARGET_URL` environment variable.
 
-The project uses a label-based detection approach:
+## Testing
 
-1. Finds form labels using their visible text.
-2. Uses label associations and nearby DOM relationships to locate the corresponding input elements.
-3. Identifies radio options using their associated values or visible text.
-4. Selects dropdown options by visible text.
-5. Verifies the result after every interaction.
+The automation was tested against the original CloudQA form and a local HTML test page.
 
-This approach reduces dependency on fixed IDs and class names.
+| Test Scenario                  | Result |
+| ------------------------------ | ------ |
+| Original HTML structure        | PASS   |
+| Changed IDs, names and classes | PASS   |
+| Reordered fields               | PASS   |
+| Similar-looking fields         | PASS   |
+| Nested HTML structure          | PASS   |
+| Combined changes               | PASS   |
 
-## Test Results
+## Approach
 
-The automation was tested on the CloudQA Automation Practice Form.
-
-| Field      | Operation    | Result |
-| ---------- | ------------ | ------ |
-| First Name | Enter text   | PASS   |
-| Gender     | Select Male  | PASS   |
-| State      | Select India | PASS   |
-
-**Note:** The dropdown is labelled "State" on the target page, but its available options are countries. India was selected for testing.
+The application identifies form elements using visible labels, associated elements and DOM relationships instead of depending entirely on fixed IDs or CSS classes.
 
 ## Limitations
 
-- The current implementation has been tested on the original target page.
-- It has not yet been validated against every possible DOM structure change.
-- Complex nested layouts and iframe-based forms may require additional handling.
-- Similar-looking labels and ambiguous form elements may require stronger disambiguation logic.
+- Tested against the original CloudQA page and controlled local HTML variations.
+- Complex or significantly different HTML structures may require improvements.
+- The CloudQA dropdown is labelled State but contains country options. India was selected for testing.

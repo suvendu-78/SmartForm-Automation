@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Form Testing</title>
+  </head>
+  <body>
+    <h2>Dynamic Automation Test Form</h2>
+
+    <form id="testForm"></form>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+
+      const mutate = params.get("mutate") === "1";
+      const reorder = params.get("reorder") === "1";
+      const decoys = params.get("decoys") === "1";
+      const nested = params.get("nested") === "1";
+
+      const form = document.getElementById("testForm");
+
+      const firstName = document.createElement("div");
+      firstName.className = mutate ? "new-field-wrapper" : "form-group";
+
+      const firstId = mutate ? "user_first_2026" : "fname";
+      const firstLabel = document.createElement("label");
+
+      firstLabel.textContent = "First Name";
+      firstLabel.setAttribute("for", firstId);
+
+      const firstInput = document.createElement("input");
+      firstInput.id = firstId;
+      firstInput.name = mutate ? "customer_name" : "First Name";
+      firstInput.type = "text";
+      firstInput.className = mutate ? "input-changed" : "form-control";
+      firstInput.placeholder = "Enter first name";
+
+      firstName.append(firstLabel, firstInput);
+
+      const gender = document.createElement("div");
+      gender.className = mutate ? "selection-wrapper" : "form-group";
+
+      const genderLabel = document.createElement("label");
+      genderLabel.textContent = "Gender";
+
+      const radioContainer = document.createElement("div");
+
+      if (nested) {
+        const extraWrapper = document.createElement("div");
+        extraWrapper.className = "new-radio-layout";
+        radioContainer.appendChild(extraWrapper);
+      }
+
+      const radioParent = nested
+        ? radioContainer.firstElementChild
+        : radioContainer;
+
+      ["Male", "Female", "Transgender"].forEach((option, index) => {
+        const optionWrapper = document.createElement("div");
+        const radio = document.createElement("input");
+        const optionLabel = document.createElement("span");
+
+        radio.type = "radio";
+        radio.value = option;
+        radio.id = mutate ? `gender_option_${index}` : option.toLowerCase();
+        radio.name = mutate ? "identity_selection" : "gender";
+
+        optionLabel.textContent = option;
+
+        optionWrapper.append(radio, optionLabel);
+        radioParent.appendChild(optionWrapper);
+      });
+
+      gender.append(genderLabel, radioContainer);
+
+      const state = document.createElement("div");
+      state.className = mutate ? "location-wrapper" : "form-group";
+
+      const stateId = mutate ? "location_choice" : "state";
+
+      const stateLabel = document.createElement("label");
+      stateLabel.textContent = "State";
+      stateLabel.setAttribute("for", stateId);
+
+      const dropdown = document.createElement("select");
+      dropdown.id = stateId;
+      dropdown.name = mutate ? "location_selection" : "State";
+      dropdown.className = mutate ? "changed-select" : "form-control";
+
+      ["Select Country", "India", "USA", "Canada"].forEach((option, index) => {
+        const item = document.createElement("option");
+        item.value = index === 0 ? "" : option;
+        item.textContent = option;
+        dropdown.appendChild(item);
+      });
+
+      state.append(stateLabel, dropdown);
+
+      // Similar-looking decoy fields
+      const decoyFields = [];
+
+      if (decoys) {
+        const decoy = document.createElement("div");
+        decoy.className = "extra-field";
+
+        const label = document.createElement("label");
+        label.textContent = "First Name (optional)";
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Another name field";
+
+        decoy.append(label, input);
+        decoyFields.push(decoy);
+
+        const other = document.createElement("div");
+        const otherLabel = document.createElement("label");
+        otherLabel.textContent = "Gender Preference";
+
+        const otherRadio = document.createElement("input");
+        otherRadio.type = "radio";
+        otherRadio.name = "other_gender";
+        otherRadio.value = "Male";
+
+        other.append(otherLabel, otherRadio);
+        decoyFields.push(other);
+      }
+
+      const fields = [firstName, gender, state];
+
+      if (reorder) {
+        fields.reverse();
+      }
+
+      fields.forEach((field) => form.appendChild(field));
+      decoyFields.forEach((field) => form.appendChild(field));
+    </script>
+  </body>
+</html>
